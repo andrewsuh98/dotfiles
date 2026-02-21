@@ -50,9 +50,11 @@ defaults write -g CGDisableCursorLocationMagnification -bool true
 # Clear text replacement shortcuts
 defaults write -g NSUserDictionaryReplacementItems -array
 
-# ── Trackpad ──────────────────────────────────
+# ── Trackpad / Mouse ─────────────────────────
 # Tap to click
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+# Natural scrolling
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 
 # ── Apply changes ─────────────────────────────
 killall Finder 2>/dev/null || true
