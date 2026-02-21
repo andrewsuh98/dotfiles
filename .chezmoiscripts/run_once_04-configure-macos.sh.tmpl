@@ -1,0 +1,63 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+echo "Configuring macOS defaults..."
+
+# ── Keyboard ──────────────────────────────────
+# Fast key repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 2
+# Short delay until key repeat
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
+# ── Finder ────────────────────────────────────
+# Show all file extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+# Show hidden files
+defaults write com.apple.finder AppleShowAllFiles -bool true
+# Show path bar at bottom of Finder
+defaults write com.apple.finder ShowPathbar -bool true
+# Show status bar
+defaults write com.apple.finder ShowStatusBar -bool true
+# Default to column view
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+# Sort folders before files
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# ── Dock ──────────────────────────────────────
+# Auto-hide the Dock
+defaults write com.apple.dock autohide -bool true
+# Remove auto-hide delay
+defaults write com.apple.dock autohide-delay -float 0
+# Instant auto-hide animation
+defaults write com.apple.dock autohide-time-modifier -float 0
+# Set icon size
+defaults write com.apple.dock tilesize -int 64
+# Don't show recent applications
+defaults write com.apple.dock show-recents -bool false
+
+# ── Screenshots ───────────────────────────────
+# Save screenshots to Desktop
+defaults write com.apple.screencapture location -string "$HOME/Desktop"
+# Save as PNG
+defaults write com.apple.screencapture type -string "png"
+
+# ── Cursor ────────────────────────────────────
+# Disable cursor magnification on shake
+defaults write -g CGDisableCursorLocationMagnification -bool true
+
+# ── Text Input ────────────────────────────────
+# Clear text replacement shortcuts
+defaults write -g NSUserDictionaryReplacementItems -array
+
+# ── Trackpad ──────────────────────────────────
+# Tap to click
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+
+# ── Apply changes ─────────────────────────────
+killall Finder 2>/dev/null || true
+killall Dock 2>/dev/null || true
+killall SystemUIServer 2>/dev/null || true
+
+echo "macOS defaults configured."
+{{ end -}}
