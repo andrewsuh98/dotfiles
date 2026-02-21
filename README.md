@@ -9,3 +9,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/andrewsuh98/dotfiles/main/
 ```
 
 This installs Xcode CLI tools, chezmoi, and runs `chezmoi init --apply`.
+
+---
+
+Ported from a git bare dotfiles repo, archived at https://github.com/andrewsuh98/dotfiles-bare.

@@ -104,15 +104,12 @@ fi
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 alias nv="nvim"
-alias zshconfig="nvim ~/.zshrc"
-alias vimconfig="nvim ~/.vimrc"
-alias nvimconfig="nvim ~/.config/nvim/"
-alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+alias zshconfig="chezmoi --watch ~/.zshrc"
+alias nvimconfig="chezmoi --watch ~/.config/nvim/"
 alias chrome="open -a 'Google Chrome'"
 alias arc="open -a 'Arc'"
 alias python="python3"
 alias lg="lazygit"
-alias lgdf="lazygit --git-dir=$HOME/.cfg --work-tree=$HOME"
 alias sqlfluff="~/.local/share/nvim/mason/bin/sqlfluff"
 alias pip="pip3"
 
