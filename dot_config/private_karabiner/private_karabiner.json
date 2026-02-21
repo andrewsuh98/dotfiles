@@ -204,13 +204,15 @@
                         ]
                     },
                     {
-                        "description": "Left ctrl + hjkl to arrow keys Vim (except in Kitty)",
+                        "description": "Left ctrl + hjkl to arrow keys Vim (except in Kitty, iTerm2, and Terminal)",
                         "manipulators": [
                             {
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "^net\\.kovidgoyal\\.kitty$"
+                                            "^net\\.kovidgoyal\\.kitty$",
+                                            "^com\\.googlecode\\.iterm2$",
+                                            "^com\\.apple\\.Terminal$"
                                         ],
                                         "type": "frontmost_application_unless"
                                     }
@@ -229,7 +231,9 @@
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "^net\\.kovidgoyal\\.kitty$"
+                                            "^net\\.kovidgoyal\\.kitty$",
+                                            "^com\\.googlecode\\.iterm2$",
+                                            "^com\\.apple\\.Terminal$"
                                         ],
                                         "type": "frontmost_application_unless"
                                     }
@@ -248,7 +252,9 @@
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "^net\\.kovidgoyal\\.kitty$"
+                                            "^net\\.kovidgoyal\\.kitty$",
+                                            "^com\\.googlecode\\.iterm2$",
+                                            "^com\\.apple\\.Terminal$"
                                         ],
                                         "type": "frontmost_application_unless"
                                     }
@@ -267,7 +273,9 @@
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "^net\\.kovidgoyal\\.kitty$"
+                                            "^net\\.kovidgoyal\\.kitty$",
+                                            "^com\\.googlecode\\.iterm2$",
+                                            "^com\\.apple\\.Terminal$"
                                         ],
                                         "type": "frontmost_application_unless"
                                     }
