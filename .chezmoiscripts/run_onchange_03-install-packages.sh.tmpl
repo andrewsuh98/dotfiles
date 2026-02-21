@@ -67,10 +67,12 @@ cask "raycast"
 cask "slack"
 cask "soundsource"
 
-# -- Mac App Store (full only) --
+{{ if .install_mas -}}
+# -- Mac App Store --
 mas "Fantastical", id: 975937182
 mas "Spark", id: 1176895641
 mas "Things", id: 904280696
+{{ end -}}
 {{ end -}}
 
 EOF
