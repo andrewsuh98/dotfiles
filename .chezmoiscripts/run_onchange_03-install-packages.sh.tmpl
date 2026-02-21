@@ -7,14 +7,58 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 brew bundle --file=/dev/stdin <<EOF
 # -- Taps --
-# tap "homebrew/bundle"
+tap "timrogers/tap"  # for litra
 
 # -- Formulae --
+brew "bat"
+brew "btop"
+brew "chafa"
+brew "eza"
+brew "fastfetch"
+brew "fd"
+brew "fzf"
+brew "gh"
 brew "git"
 brew "git-lfs"
+brew "htop"
+brew "imagemagick"
+brew "lazygit"
+brew "litra"  # control logi lighting
+brew "mas"
+brew "neovim"
+brew "node"
+brew "oh-my-posh"
+brew "ripgrep"
+brew "thefuck"
+brew "tmux"
+brew "tpm"
+brew "uv"
+brew "zoxide"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
 
 # -- Casks --
-# cask "1password"
+cask "1password"
+cask "adguard"
+cask "arc"
+cask "claude"
+cask "claude-code"
+cask "font-jetbrains-mono"
+cask "istat-menus"
+cask "jordanbaird-ice@beta"
+cask "karabiner-elements"
+cask "keyboardcleantool"
+cask "kitty"
+cask "monitorcontrol"
+cask "obsidian"
+cask "raycast"
+cask "slack"
+cask "soundsource"
+
+# -- Mac App Store --
+mas "Fantastical", id: 975937182
+mas "Spark", id: 1176895641
+mas "Things", id: 904280696
 
 EOF
 {{ end -}}
