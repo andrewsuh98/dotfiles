@@ -1,5 +1,10 @@
+{{- $name := promptString "Git full name" .name -}}
+{{- $email := promptString "Git email" .email -}}
+{{- $install_profile := promptChoice "Install profile" (list "full" "lean") .install_profile -}}
+{{- $is_vm := promptBool "Is this a VM" .is_vm -}}
+
 [data]
-  name = {{ promptString "Git full name" | quote }}
-  email = {{ promptString "Git email" | quote }}
-  install_profile = {{ promptChoice "Install profile" (list "full" "lean") | quote }}
-  is_vm = {{ promptBool "Is this a VM" | toToml }}
+  name = {{ $name | quote }}
+  email = {{ $email | quote }}
+  install_profile = {{ $install_profile | quote }}
+  is_vm = {{ $is_vm | toToml }}
