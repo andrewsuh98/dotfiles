@@ -147,7 +147,7 @@ bindkey -r '^T'
 bindkey '^F' fzf-file-widget
 
 # ----- the fuck -----
-eval $(thefuck --alias)
+command -v thefuck &>/dev/null && eval $(thefuck --alias)
 
 # Setup uv autocomplete
 eval "$(uv generate-shell-completion zsh)"
