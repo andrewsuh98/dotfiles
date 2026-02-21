@@ -137,10 +137,6 @@ source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 # autosuggestions plugin
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# autojump plugin
-[ -f $(brew --prefix)/etc/profile.d/autojump.sh ] && . $(brew --prefix)/etc/profile.d/autojump.sh
-autoload -U compinit && compinit u-
-
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
 bindkey -r '^T'
@@ -151,3 +147,14 @@ command -v thefuck &>/dev/null && eval $(thefuck --alias)
 
 # Setup uv autocomplete
 eval "$(uv generate-shell-completion zsh)"
+
+# zsh completions (load after plugins, rebuild cache once per day)
+autoload -Uz compinit
+if [ "$(find ~/.zcompdump -mtime +1 2>/dev/null)" ] || [ ! -f ~/.zcompdump ]; then
+    compinit
+else
+    compinit -C
+fi
+
+# zoxide (smart cd)
+eval "$(zoxide init zsh --cmd z)"
