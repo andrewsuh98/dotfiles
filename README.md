@@ -2,6 +2,8 @@
 
 Personal dotfiles for macOS (Apple Silicon), managed with [chezmoi](https://www.chezmoi.io/).
 
+![screenshot](demo.webp)
+
 ## Bootstrap
 
 ```bash
