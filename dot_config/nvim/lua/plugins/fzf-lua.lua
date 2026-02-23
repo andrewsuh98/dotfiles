@@ -3,7 +3,7 @@ return {
 	opts = {
 		defaults = {
 			-- NOTE: uncomment to disable all interactive headers
-			-- no_header_i = true,
+			no_header_i = true,
 		},
 		files = {
 			header = false,
