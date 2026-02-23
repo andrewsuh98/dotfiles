@@ -50,6 +50,10 @@ defaults write -g CGDisableCursorLocationMagnification -bool true
 # Clear text replacement shortcuts
 defaults write -g NSUserDictionaryReplacementItems -array
 
+# ── Clock ───────────────────────────────────
+# Use 24-hour clock
+defaults write NSGlobalDomain AppleICUForce24HourTime -bool true
+
 # ── Trackpad / Mouse ─────────────────────────
 # Tap to click
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
@@ -60,6 +64,7 @@ defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 killall Finder 2>/dev/null || true
 killall Dock 2>/dev/null || true
 killall SystemUIServer 2>/dev/null || true
+killall ControlCenter 2>/dev/null || true
 
 echo "macOS defaults configured."
 {{ end -}}
