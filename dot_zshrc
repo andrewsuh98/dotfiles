@@ -154,4 +154,4 @@ else
 fi
 
 # zoxide (smart cd)
-eval "$(zoxide init zsh --cmd z)"
+eval "$(zoxide init zsh)"
