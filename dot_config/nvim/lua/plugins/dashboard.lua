@@ -2,10 +2,11 @@ local separator = { "───────────────────�
 
 local function key_item(key, desc, action, opts)
 	-- Pad description to fixed width so all entries align when centered
-	local width = 24
-	local padded = desc .. string.rep(" ", width - #desc)
+	local desc_width = 24
+	local padded = desc .. string.rep(" ", desc_width - #desc)
+	local left_pad = "       "
 	return {
-		text = { { " " .. key .. "    ", hl = "Identifier" }, { padded, hl = "Normal" } },
+		text = { { left_pad .. " " .. key .. "    ", hl = "Identifier" }, { padded, hl = "Normal" } },
 		align = "center",
 		key = key,
 		action = action,
