@@ -27,6 +27,12 @@ defaults write com.apple.finder _FXSortFoldersFirst -bool true
 # ── Dock ──────────────────────────────────────
 # Auto-hide the Dock
 defaults write com.apple.dock autohide -bool true
+# Group windows by application (for aerospace)
+# see: https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control
+defaults write com.apple.dock expose-group-apps -bool true
+# Disable displays have separate spaces (for aerospace)
+# see: https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
+defaults write com.apple.spaces spans-displays -bool true
 # Remove auto-hide delay
 defaults write com.apple.dock autohide-delay -float 0
 # Instant auto-hide animation
