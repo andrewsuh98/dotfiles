@@ -195,6 +195,10 @@ run = 'move-node-to-workspace M'
 if.app-id = 'com.apple.MobileSMS'
 run = 'move-node-to-workspace M'
 
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace M'
+
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 # 'main' binding mode must be always presented
