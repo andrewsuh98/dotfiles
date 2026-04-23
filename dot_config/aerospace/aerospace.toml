@@ -108,11 +108,11 @@ outer.right = 0
 # Assign workspaces to monitors
 # See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [workspace-to-monitor-force-assignment]
-A = 'built-in'  # AI
-C = 'built-in'  # Calendar
-D = 'built-in'  # To-Do
-E = 'built-in'  # Email
-M = 'built-in'  # Messaging
+A = 'built-in' # AI
+C = 'built-in' # Calendar
+D = 'built-in' # To-Do
+E = 'built-in' # Email
+M = 'built-in' # Messaging
 
 # Workspace mappings:
 # | Binding | App              | Mnemonic     |
