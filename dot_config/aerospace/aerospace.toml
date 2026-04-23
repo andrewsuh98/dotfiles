@@ -148,6 +148,10 @@ if.app-id = 'com.logi.ghub'
 run = 'layout floating'
 
 [[on-window-detected]]
+if.app-id = 'com.apple.FaceTime'
+run = 'layout floating'
+
+[[on-window-detected]]
 if.app-id = 'company.thebrowser.Browser'
 run = 'move-node-to-workspace B'
 
