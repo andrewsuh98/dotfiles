@@ -1,0 +1,55 @@
+#!/bin/bash
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+ITEM_DIR="$CONFIG_DIR/items"
+FONT="JetBrainsMono Nerd Font"
+
+source "$CONFIG_DIR/colors.sh"
+source "$CONFIG_DIR/icons.sh"
+
+# Bar appearance: transparent background, floating style
+sketchybar --bar \
+  position=top \
+  height=32 \
+  blur_radius=30 \
+  color=$BAR_COLOR \
+  margin=0 \
+  corner_radius=0 \
+  y_offset=0 \
+  shadow=off \
+  padding_left=8 \
+  padding_right=8
+
+# Default item properties
+default=(
+  padding_left=4
+  padding_right=4
+  icon.font="$FONT:Bold:14.0"
+  icon.color=$FG
+  icon.padding_left=4
+  icon.padding_right=4
+  label.font="$FONT:SemiBold:12.0"
+  label.color=$FG
+  label.padding_left=4
+  label.padding_right=4
+  background.padding_left=2
+  background.padding_right=2
+)
+sketchybar --default "${default[@]}"
+
+# Left items
+source "$ITEM_DIR/spaces.sh"
+source "$ITEM_DIR/front_app.sh"
+
+# Center items
+source "$ITEM_DIR/media.sh"
+
+# Right items (added right-to-left, so clock appears rightmost)
+source "$ITEM_DIR/clock.sh"
+source "$ITEM_DIR/wifi.sh"
+source "$ITEM_DIR/volume.sh"
+source "$ITEM_DIR/battery.sh"
+source "$ITEM_DIR/memory.sh"
+source "$ITEM_DIR/cpu.sh"
+
+sketchybar --update
