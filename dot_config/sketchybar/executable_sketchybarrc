@@ -37,6 +37,8 @@ default=(
 )
 sketchybar --default "${default[@]}"
 
+sketchybar --add event aerospace_focus_change
+
 # Left items
 source "$ITEM_DIR/spaces.sh"
 source "$ITEM_DIR/front_app.sh"
