@@ -20,10 +20,8 @@ for SID in "${WORKSPACES[@]}"; do
                    click_script="aerospace workspace $SID"
 done
 
-# Single hidden item handles all workspace updates
 sketchybar --add item space_updater left \
            --set space_updater \
                  drawing=off \
                  script="$PLUGIN_DIR/aerospace.sh" \
            --subscribe space_updater aerospace_workspace_change
-

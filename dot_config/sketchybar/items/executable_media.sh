@@ -12,4 +12,5 @@ sketchybar --add item media center \
                  label.padding_right=8 \
                  drawing=off \
                  update_freq=5 \
-                 script="$PLUGIN_DIR/media.sh"
+                 script="$PLUGIN_DIR/media.sh" \
+           --subscribe media media_change

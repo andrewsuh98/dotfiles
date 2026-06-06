@@ -18,10 +18,4 @@ else
   LABEL="$TITLE"
 fi
 
-if [ "$STATE" = "0" ]; then
-  ICON=$ICON_MEDIA_PAUSE
-else
-  ICON=$ICON_MEDIA
-fi
-
-sketchybar --set "$NAME" drawing=on icon="$ICON" label="$LABEL"
+sketchybar --set "$NAME" drawing=on icon="$ICON_MEDIA" label="$LABEL"

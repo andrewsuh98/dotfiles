@@ -7,5 +7,6 @@ sketchybar --add item volume right \
                  icon.color=$MAGENTA \
                  label.font="$FONT:SemiBold:13.0" \
                  label.color=$FG \
+                 update_freq=0 \
                  script="$PLUGIN_DIR/volume.sh" \
            --subscribe volume volume_change

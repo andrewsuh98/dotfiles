@@ -6,7 +6,7 @@ sketchybar --add item wifi right \
                  icon.font="$FONT:Bold:16.0" \
                  icon.color=$RED \
                  label.drawing=off \
-                 drawing=off \
+                 drawing=on \
                  update_freq=10 \
                  script="$PLUGIN_DIR/wifi.sh" \
            --subscribe wifi wifi_change

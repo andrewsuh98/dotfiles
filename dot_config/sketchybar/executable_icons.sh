@@ -20,31 +20,3 @@ export ICON_CPU="󰻠"
 export ICON_MEMORY="󰍛"
 export ICON_MEDIA="󰎈"
 export ICON_MEDIA_PAUSE="󰏤"
-export ICON_APP=""
-
-# App icon mapping (Nerd Font glyphs)
-app_icon() {
-  case "$1" in
-    "Arc") echo "󰖟" ;;
-    "Kitty"|"Terminal") echo "" ;;
-    "Code"|"Visual Studio Code") echo "󰨞" ;;
-    "Obsidian") echo "󱓧" ;;
-    "Claude") echo "󰧑" ;;
-    "Finder") echo "󰀶" ;;
-    "Spark") echo "󰇮" ;;
-    "Things"|"Things 3") echo "󰄵" ;;
-    "Fantastical") echo "" ;;
-    "Discord") echo "󰙯" ;;
-    "WhatsApp") echo "󰖣" ;;
-    "Messages") echo "󰍡" ;;
-    "KakaoTalk") echo "󰍡" ;;
-    "Safari") echo "󰀹" ;;
-    "Preview") echo "" ;;
-    "System Settings"|"System Preferences") echo "" ;;
-    "Spotify") echo "" ;;
-    "Music") echo "󰎈" ;;
-    "FaceTime") echo "󰍢" ;;
-    "1Password") echo "󰌋" ;;
-    *) echo "$ICON_APP" ;;
-  esac
-}

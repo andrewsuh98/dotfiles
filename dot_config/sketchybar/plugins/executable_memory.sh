@@ -6,9 +6,12 @@ if [ -n "$MEMORY_PRESSURE" ]; then
   USED=$((100 - MEMORY_PRESSURE))
   sketchybar --set "$NAME" label="${USED}%"
 else
-  PAGES_FREE=$(vm_stat | awk '/Pages free/ {gsub(/\./, "", $3); print $3}')
-  PAGES_INACTIVE=$(vm_stat | awk '/Pages inactive/ {gsub(/\./, "", $3); print $3}')
-  PAGES_SPECULATIVE=$(vm_stat | awk '/Pages speculative/ {gsub(/\./, "", $3); print $3}')
+  read PAGES_FREE PAGES_INACTIVE PAGES_SPECULATIVE <<< "$(vm_stat | awk '
+    /Pages free/        {gsub(/\./, "", $3); free=$3}
+    /Pages inactive/    {gsub(/\./, "", $3); inact=$3}
+    /Pages speculative/ {gsub(/\./, "", $3); spec=$3}
+    END {print free, inact, spec}
+  ')"
   TOTAL=$(sysctl -n hw.memsize)
   FREE_BYTES=$(( (PAGES_FREE + PAGES_INACTIVE + PAGES_SPECULATIVE) * 4096 ))
   USED_PERCENT=$(( 100 - (FREE_BYTES * 100 / TOTAL) ))

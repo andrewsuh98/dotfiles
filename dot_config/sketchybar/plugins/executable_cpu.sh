@@ -1,4 +1,5 @@
 #!/bin/bash
 
-CPU=$(top -l 1 -n 0 2>/dev/null | awk '/CPU usage/{printf "%.0f", $3}')
+CORES=$(sysctl -n hw.logicalcpu)
+CPU=$(ps -A -o %cpu | awk -v cores="$CORES" '{s+=$1} END {printf "%.0f", s/cores}')
 sketchybar --set "$NAME" label="${CPU}%"
