@@ -6,9 +6,6 @@ set -euo pipefail
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 brew bundle --file=/dev/stdin <<EOF
-# -- Taps --
-tap "timrogers/tap"  # for litra
-
 # -- Core Formulae (always installed) --
 brew "bat"
 brew "eza"
@@ -39,6 +36,7 @@ brew "chafa"
 brew "fastfetch"
 brew "htop"
 brew "imagemagick"
+tap "timrogers/tap"  # for litra
 brew "litra"  # control logi lighting
 brew "mas"
 brew "thefuck"
