@@ -5,6 +5,13 @@ set -euo pipefail
 # Ensure brew is on PATH
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Trust third-party taps so brew bundle can install from them
+brew trust jandedobbeleer/oh-my-posh
+{{ if eq .install_profile "full" -}}
+brew trust nikitabobko/tap
+brew trust timrogers/tap
+{{ end -}}
+
 brew bundle --file=/dev/stdin <<EOF
 # -- Core Formulae (always installed) --
 brew "bat"
