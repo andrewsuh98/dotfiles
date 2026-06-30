@@ -2,6 +2,7 @@
 {{- $email := promptStringOnce . "email" "Git email" -}}
 {{- $install_profile := promptChoiceOnce . "install_profile" "Install profile" (list "full" "lean") -}}
 {{- $is_vm := promptBoolOnce . "is_vm" "Is this a VM" -}}
+{{- $is_work := promptBoolOnce . "is_work" "Is this a work machine" -}}
 {{- $install_mas := promptBoolOnce . "install_mas" "Install Mac App Store apps" -}}
 
 [data]
@@ -9,4 +10,5 @@
   email = {{ $email | quote }}
   install_profile = {{ $install_profile | quote }}
   is_vm = {{ $is_vm | toToml }}
+  is_work = {{ $is_work | toToml }}
   install_mas = {{ $install_mas | toToml }}

@@ -5,11 +5,15 @@ set -euo pipefail
 # Ensure brew is on PATH
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-brew bundle --file=/dev/stdin <<EOF
-# -- Taps --
-tap "FelixKratz/formulae"
-tap "timrogers/tap"  # for litra
+# Trust third-party taps so brew bundle can install from them
+brew trust jandedobbeleer/oh-my-posh
+{{ if eq .install_profile "full" -}}
+brew trust nikitabobko/tap
+brew trust timrogers/tap
+brew trust FelixKratz/formulae
+{{ end -}}
 
+brew bundle --file=/dev/stdin <<EOF
 # -- Core Formulae (always installed) --
 brew "bat"
 brew "eza"
@@ -42,6 +46,8 @@ brew "htop"
 brew "nowplaying-cli"
 brew "sketchybar"
 brew "imagemagick"
+tap "FelixKratz/formulae"
+tap "timrogers/tap"  # for litra
 brew "litra"  # control logi lighting
 brew "mas"
 brew "thefuck"

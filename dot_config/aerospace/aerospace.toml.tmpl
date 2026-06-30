@@ -124,15 +124,23 @@ M = 'built-in' # Messaging
 # Workspace mappings:
 # | Binding | App              | Mnemonic     |
 # |---------|------------------|--------------|
-# | alt-B   | Arc              | Browser      |
+# | alt-B   | Arc / Chrome*    | Browser      |
 # | alt-T   | Kitty            | Terminal     |
 # | alt-I   | VS Code          | IDE          |
-# | alt-E   | Spark            | Email        |
+# | alt-E   | Spark / Outlook* | Email        |
 # | alt-D   | Things3          | to-Do        |
-# | alt-C   | Fantastical      | Calendar     |
+# | alt-C   | Fantastical / Outlook* | Calendar |
 # | alt-N   | Obsidian         | Notes        |
 # | alt-A   | Claude           | AI           |
-# | alt-M   | Messaging group  | Messages     |
+# | alt-M   | Messaging / Slack* | Messages   |
+#
+# * On work machines (is_work=true): alt-B opens Chrome, alt-M opens Slack, and
+#   Outlook handles mail+calendar by running as two windows -- the Calendar window
+#   is routed to workspace C and the Mail window to E (see on-window-detected
+#   rules below), so alt-E and alt-C are plain workspace switches. Open both
+#   Outlook windows once (Mail + Calendar); they persist across restarts.
+#   On personal machines: alt-B opens Arc, alt-M focuses the messaging group,
+#   alt-E opens Spark and alt-C opens Fantastical.
 
 [[on-window-detected]]
 if.app-id = 'com.apple.weather'
@@ -140,6 +148,10 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.electron.wispr-flow'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.superduper.superwhisper'
 run = 'layout floating'
 
 [[on-window-detected]]
@@ -159,7 +171,11 @@ if.app-id = 'com.apple.FaceTime'
 run = 'layout floating'
 
 [[on-window-detected]]
+{{ if .is_work -}}
+if.app-id = 'com.google.Chrome'
+{{ else -}}
 if.app-id = 'company.thebrowser.Browser'
+{{ end -}}
 run = 'move-node-to-workspace B'
 
 [[on-window-detected]]
@@ -169,18 +185,31 @@ run = 'move-node-to-workspace T'
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
 run = 'move-node-to-workspace I'
+{{ if .is_work }}
+# Outlook runs as two windows: route the Calendar window to C and everything
+# else (Mail) to E. The Calendar rule must come first (first match wins).
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+if.window-title-regex-substring = 'Calendar'
+run = 'move-node-to-workspace C'
 
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+run = 'move-node-to-workspace E'
+{{- else }}
 [[on-window-detected]]
 if.app-id = 'com.readdle.SparkDesktop'
 run = 'move-node-to-workspace E'
+{{- end }}
 
 [[on-window-detected]]
 if.app-id = 'com.culturedcode.ThingsMac'
 run = 'move-node-to-workspace D'
-
+{{ if not .is_work }}
 [[on-window-detected]]
 if.app-id = 'com.flexibits.fantastical2.mac'
 run = 'move-node-to-workspace C'
+{{- end }}
 
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
@@ -206,6 +235,12 @@ run = 'move-node-to-workspace M'
 if.app-id = 'com.hnc.Discord'
 run = 'move-node-to-workspace M'
 
+{{ if .is_work -}}
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace M'
+
+{{ end -}}
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 # 'main' binding mode must be always presented
@@ -270,14 +305,30 @@ alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 alt-a = ['workspace A', 'exec-and-forget open -a "Claude"']
+{{ if .is_work -}}
+alt-b = ['workspace B', 'exec-and-forget open -a "Google Chrome"']
+{{ else -}}
 alt-b = ['workspace B', 'exec-and-forget open -a "Arc"']
+{{ end -}}
+{{ if .is_work -}}
+alt-c = 'workspace C'
+{{ else -}}
 alt-c = ['workspace C', 'exec-and-forget open -a "Fantastical"']
+{{ end -}}
 alt-d = ['workspace D', 'exec-and-forget open -a "Things3"']
+{{ if .is_work -}}
+alt-e = 'workspace E'
+{{ else -}}
 alt-e = ['workspace E', 'exec-and-forget open -a "Spark Desktop"']
+{{ end -}}
 alt-f = 'workspace F'
 alt-g = 'workspace G'
 alt-i = ['workspace I', 'exec-and-forget open -a "Visual Studio Code"']
+{{ if .is_work -}}
+alt-m = ['workspace M', 'exec-and-forget open -a "Slack"']
+{{ else -}}
 alt-m = 'workspace M'
+{{ end -}}
 alt-n = ['workspace N', 'exec-and-forget open -a "Obsidian"']
 alt-o = 'workspace O'
 alt-p = 'workspace P'
