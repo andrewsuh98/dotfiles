@@ -9,6 +9,13 @@ config-version = 2
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = []
 
+exec-on-workspace-change = [
+  '/bin/bash', '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
+]
+
+on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus_change']
+
 # Start AeroSpace at login
 start-at-login = true
 
@@ -102,7 +109,7 @@ inner.horizontal = 0
 inner.vertical = 0
 outer.left = 0
 outer.bottom = 0
-outer.top = 0
+outer.top = [{ monitor.'built-in' = 0 }, 32]
 outer.right = 0
 
 # Assign workspaces to monitors

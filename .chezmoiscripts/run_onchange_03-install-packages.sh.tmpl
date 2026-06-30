@@ -10,6 +10,7 @@ brew trust jandedobbeleer/oh-my-posh
 {{ if eq .install_profile "full" -}}
 brew trust nikitabobko/tap
 brew trust timrogers/tap
+brew trust FelixKratz/formulae
 {{ end -}}
 
 brew bundle --file=/dev/stdin <<EOF
@@ -42,7 +43,10 @@ brew "btop"
 brew "chafa"
 brew "fastfetch"
 brew "htop"
+brew "nowplaying-cli"
+brew "sketchybar"
 brew "imagemagick"
+tap "FelixKratz/formulae"
 tap "timrogers/tap"  # for litra
 brew "litra"  # control logi lighting
 brew "mas"
