@@ -79,7 +79,7 @@ cask "obsidian"
 cask "raycast"
 cask "slack"
 cask "soundsource"
-cask "nikitabobko/tap/aerospace"
+cask "nikitabobko/tap/aerospace", args: { no_quarantine: true }  # not notarized; skip Gatekeeper quarantine (no sudo needed)
 
 {{ if .install_mas -}}
 # -- Mac App Store --
