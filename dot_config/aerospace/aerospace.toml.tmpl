@@ -13,7 +13,11 @@ after-startup-command = [
 
 exec-on-workspace-change = [
   '/bin/bash', '-c',
-  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
+  '''sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE
+{{ if .is_work -}}
+REMINDER_ID=$(/opt/homebrew/bin/aerospace list-windows --all 2>/dev/null | awk -F"|" "/Microsoft Outlook.*Reminder/{print \$1}" | tr -d " ")
+[ -n "$REMINDER_ID" ] && /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$REMINDER_ID" "$AEROSPACE_FOCUSED_WORKSPACE"
+{{- end }}''',
 ]
 
 on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus_change']
@@ -188,8 +192,15 @@ run = 'move-node-to-workspace T'
 if.app-id = 'com.microsoft.VSCode'
 run = 'move-node-to-workspace I'
 {{ if .is_work }}
-# Outlook runs as two windows: route the Calendar window to C and everything
-# else (Mail) to E. The Calendar rule must come first (first match wins).
+# Outlook runs as three window types; rules are first-match:
+#   1. Reminders → float in place (sticky via exec-on-workspace-change hook)
+#   2. Calendar  → workspace C
+#   3. Everything else (Mail) → workspace E
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+if.window-title-regex-substring = 'Reminder'
+run = 'layout floating'
+
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Outlook'
 if.window-title-regex-substring = 'Calendar'
