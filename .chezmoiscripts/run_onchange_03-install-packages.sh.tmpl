@@ -19,7 +19,8 @@ brew trust FelixKratz/formulae
 brew trust timrogers/tap
 {{ end -}}
 
-brew bundle --file=/dev/stdin <<EOF
+# --no-upgrade: install missing packages only; don't upgrade existing ones on re-run
+brew bundle --no-upgrade --file=/dev/stdin <<EOF
 # -- Core formulae (all machines, all OSes) --
 brew "bat"
 brew "eza"
