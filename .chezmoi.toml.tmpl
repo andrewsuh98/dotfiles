@@ -1,14 +1,42 @@
 {{- $name := promptStringOnce . "name" "Git full name" -}}
 {{- $email := promptStringOnce . "email" "Git email" -}}
-{{- $install_profile := promptChoiceOnce . "install_profile" "Install profile" (list "full" "lean") -}}
-{{- $is_vm := promptBoolOnce . "is_vm" "Is this a VM" -}}
-{{- $is_work := promptBoolOnce . "is_work" "Is this a work machine" -}}
-{{- $install_mas := promptBoolOnce . "install_mas" "Install Mac App Store apps" -}}
+
+{{/* Primary role. Prompted on macOS; anything else is a headless Linux server. */}}
+{{- $role := "server" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $role = promptChoiceOnce . "role" "Machine role" (list "personal" "work" "vm") -}}
+{{- end -}}
+
+{{/*
+  Capability toggles, derived from $role. Each can be overridden per machine by
+  adding a [data.overrides] table to ~/.config/chezmoi/chezmoi.toml, e.g.:
+
+      [data.overrides]
+      rice = false
+      terminal = "iterm2"
+*/}}
+{{- $gui        := dig "overrides" "gui"        (ne $role "server")                          . -}}
+{{- $rice       := dig "overrides" "rice"       (or (eq $role "personal") (eq $role "work")) . -}}
+{{- $cli_extras := dig "overrides" "cli_extras" true                                         . -}}
+{{- $terminal   := dig "overrides" "terminal"   (ternary "iterm2" "kitty" (eq $role "vm"))   . -}}
+
+{{- $is_work     := eq $role "work" -}}
+{{- $is_personal := eq $role "personal" -}}
+
+{{/* Mac App Store apps are personal-only. */}}
+{{- $install_mas := false -}}
+{{- if $is_personal -}}
+{{-   $install_mas = promptBoolOnce . "install_mas" "Install Mac App Store apps" -}}
+{{- end -}}
 
 [data]
   name = {{ $name | quote }}
   email = {{ $email | quote }}
-  install_profile = {{ $install_profile | quote }}
-  is_vm = {{ $is_vm | toToml }}
+  role = {{ $role | quote }}
+  gui = {{ $gui | toToml }}
+  rice = {{ $rice | toToml }}
+  cli_extras = {{ $cli_extras | toToml }}
   is_work = {{ $is_work | toToml }}
+  is_personal = {{ $is_personal | toToml }}
+  terminal = {{ $terminal | quote }}
   install_mas = {{ $install_mas | toToml }}

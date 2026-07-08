@@ -1,20 +1,26 @@
-{{ if eq .chezmoi.os "darwin" -}}
+{{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") -}}
 #!/bin/bash
 set -euo pipefail
 
-# Ensure brew is on PATH
+# Ensure brew is on PATH (prefix differs by OS)
+{{ if eq .chezmoi.os "darwin" -}}
 eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ else -}}
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ end -}}
 
 # Trust third-party taps so brew bundle can install from them
 brew trust jandedobbeleer/oh-my-posh
-{{ if eq .install_profile "full" -}}
+{{ if and .rice (eq .chezmoi.os "darwin") -}}
 brew trust nikitabobko/tap
-brew trust timrogers/tap
 brew trust FelixKratz/formulae
+{{ end -}}
+{{ if and .is_personal (eq .chezmoi.os "darwin") -}}
+brew trust timrogers/tap
 {{ end -}}
 
 brew bundle --file=/dev/stdin <<EOF
-# -- Core Formulae (always installed) --
+# -- Core formulae (all machines, all OSes) --
 brew "bat"
 brew "eza"
 brew "fd"
@@ -35,51 +41,58 @@ brew "yazi"
 brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
-cask "font-jetbrains-mono"
-cask "font-jetbrains-mono-nerd-font"
 
-{{ if eq .install_profile "full" -}}
-# -- Extra Formulae (full only) --
+{{ if .cli_extras -}}
+# -- CLI extras --
 brew "btop"
 brew "chafa"
 brew "fastfetch"
 brew "htop"
-brew "nowplaying-cli"
 brew "imagemagick"
+brew "thefuck"
+{{ end -}}
+{{ if eq .chezmoi.os "darwin" }}
+{{ if .rice -}}
+# -- Rice: window manager, status bar, borders, key remap (macOS) --
 tap "FelixKratz/formulae"
 brew "sketchybar"
 brew "borders"  # JankyBorders — window border highlight, bootstrapped by aerospace
-tap "timrogers/tap"  # for litra
-brew "litra"  # control logi lighting
-brew "mas"
-brew "thefuck"
+brew "nowplaying-cli"
+cask "nikitabobko/tap/aerospace", args: { no_quarantine: true }  # not notarized; skip Gatekeeper quarantine (no sudo needed)
+cask "karabiner-elements"
 {{ end -}}
 
-# -- Terminal Emulator --
-{{ if .is_vm -}}
+{{ if .gui -}}
+# -- Terminal emulator --
+{{ if eq .terminal "iterm2" -}}
 cask "iterm2"
 {{ else -}}
 cask "kitty"
 {{ end -}}
+{{ end -}}
 
-{{ if eq .install_profile "full" -}}
-# -- Casks (full only) --
+{{ if or .is_personal .is_work -}}
+# -- Common GUI apps (personal + work) --
 cask "1password"
+cask "claude"
+cask "claude-code"
+cask "obsidian"
+cask "raycast"
+{{ end -}}
+
+{{ if .is_personal -}}
+# -- Personal apps --
 cask "adguard"
 cask "arc"
 cask "basictex"
-cask "claude"
-cask "claude-code"
 cask "istat-menus"
 cask "jordanbaird-ice@beta"
-cask "karabiner-elements"
 cask "keyboardcleantool"
 cask "monitorcontrol"
-cask "obsidian"
-cask "raycast"
-cask "slack"
 cask "soundsource"
-cask "nikitabobko/tap/aerospace", args: { no_quarantine: true }  # not notarized; skip Gatekeeper quarantine (no sudo needed)
+tap "timrogers/tap"  # for litra
+brew "litra"  # control logi lighting
+brew "mas"
 
 {{ if .install_mas -}}
 # -- Mac App Store --
@@ -88,6 +101,6 @@ mas "Spark", id: 1176895641
 mas "Things", id: 904280696
 {{ end -}}
 {{ end -}}
-
+{{ end -}}
 EOF
 {{ end -}}

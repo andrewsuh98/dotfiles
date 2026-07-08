@@ -1,3 +1,15 @@
 install.sh
 CLAUDE.md
 README.md
+
+{{ if not .rice -}}
+.config/aerospace
+.config/sketchybar
+.config/karabiner
+{{ end -}}
+{{ if or (not .gui) (ne .terminal "kitty") -}}
+.config/kitty
+{{ end -}}
+{{ if or (not .gui) (ne .terminal "iterm2") -}}
+.config/iterm2
+{{ end -}}

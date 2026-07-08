@@ -1,15 +1,19 @@
-# Path to homebrew installation (macOS ARM processor)
+# Load Homebrew (prefix differs by OS; skip if not installed)
+{{ if eq .chezmoi.os "darwin" -}}
 eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ else -}}
+[ -d /home/linuxbrew/.linuxbrew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ end -}}
 
 # Add ~/.local/bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
 
 # Export path and load oh-my-zsh
 export ZSH="$HOME/.oh-my-zsh"
-source $ZSH/oh-my-zsh.sh
+[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 
 # Load oh-my-posh
-if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+if command -v oh-my-posh &>/dev/null && [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
   eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/minimal.toml)"
 fi
 
@@ -106,8 +110,10 @@ fi
 alias nv="nvim"
 alias zshconfig="chezmoi --watch ~/.zshrc"
 alias nvimconfig="chezmoi --watch ~/.config/nvim/"
+{{ if eq .chezmoi.os "darwin" -}}
 alias chrome="open -a 'Google Chrome'"
 alias arc="open -a 'Arc'"
+{{ end -}}
 alias python="python3"
 alias lg="lazygit"
 alias sqlfluff="~/.local/share/nvim/mason/bin/sqlfluff"
@@ -128,22 +134,28 @@ alias lta1="eza --long --git --no-filesize --no-time --icons --no-user --no-perm
 alias lta2="eza --long --git --no-filesize --no-time --icons --no-user --no-permissions --tree --level=2 -all"
 alias lta3="eza --long --git --no-filesize --no-time --icons --no-user --no-permissions --tree --level=3 -all"
 
-# syntax highlighting plugin
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# autosuggestions plugin
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# zsh-syntax-highlighting / zsh-autosuggestions plugins (via brew)
+if command -v brew &>/dev/null; then
+  brew_prefix="$(brew --prefix)"
+  [ -f "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] \
+    && source "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  [ -f "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] \
+    && source "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  unset brew_prefix
+fi
 
 # Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
-bindkey -r '^T'
-bindkey '^F' fzf-file-widget
+if command -v fzf &>/dev/null; then
+  source <(fzf --zsh)
+  bindkey -r '^T'
+  bindkey '^F' fzf-file-widget
+fi
 
 # ----- the fuck -----
 command -v thefuck &>/dev/null && eval $(thefuck --alias)
 
 # Setup uv autocomplete
-eval "$(uv generate-shell-completion zsh)"
+command -v uv &>/dev/null && eval "$(uv generate-shell-completion zsh)"
 
 # zsh completions (load after plugins, rebuild cache once per day)
 autoload -Uz compinit
@@ -154,7 +166,7 @@ else
 fi
 
 # zoxide (smart cd)
-eval "$(zoxide init zsh)"
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 # yazi wrapper (cd into last visited directory on quit)
 function y() {
