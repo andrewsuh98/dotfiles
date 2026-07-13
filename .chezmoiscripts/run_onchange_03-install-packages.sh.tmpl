@@ -50,6 +50,10 @@ brew "imagemagick"
 brew "thefuck"
 {{ end -}}
 {{ if eq .chezmoi.os "darwin" }}
+# -- Fonts used by terminals and SketchyBar --
+cask "font-jetbrains-mono"
+cask "font-jetbrains-mono-nerd-font"
+
 {{ if .rice -}}
 # -- Rice: window manager, status bar, borders, key remap (macOS) --
 tap "FelixKratz/formulae"
