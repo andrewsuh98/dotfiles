@@ -15,9 +15,6 @@ brew trust jandedobbeleer/oh-my-posh
 brew trust nikitabobko/tap
 brew trust FelixKratz/formulae
 {{ end -}}
-{{ if and .is_personal (eq .chezmoi.os "darwin") -}}
-brew trust timrogers/tap
-{{ end -}}
 
 # --no-upgrade: install missing packages only; don't upgrade existing ones on re-run
 brew bundle --no-upgrade --file=/dev/stdin <<EOF
@@ -91,8 +88,6 @@ cask "jordanbaird-ice@beta"
 cask "keyboardcleantool"
 cask "monitorcontrol"
 cask "soundsource"
-tap "timrogers/tap"  # for litra
-brew "litra"  # control logi lighting
 brew "mas"
 
 {{ if .install_mas -}}
