@@ -53,24 +53,23 @@ Templates use `.chezmoi.toml` data accessed via Go template syntax (e.g., `{{ .n
 | `.name`         | string | Git user name                                                       |
 | `.email`        | string | Git email                                                           |
 | `.role`         | string | `personal`, `work`, `vm` (macOS) or `server` (Linux) -- the source of truth |
-| `.gui`          | bool   | Install and deploy the selected terminal emulator (derived: role != server) |
 | `.rice`         | bool   | Install window manager / bar / borders / karabiner (derived: personal or work) |
 | `.cli_extras`   | bool   | Install extended CLI tools (derived: true)                          |
-| `.terminal`     | string | Defaults to `kitty` (personal/work) or `iterm2` (vm); overridable per machine |
+| `.terminal`     | string | `kitty` (personal/work), `iterm2` (vm), or `none` (server); overridable per machine |
 | `.is_work`      | bool   | Work machine -- drives aerospace app routing (derived: role == work) |
 | `.is_personal`  | bool   | Personal machine -- gates personal-only apps (derived: role == personal) |
 | `.install_mas`  | bool   | Install Mac App Store apps (prompted, personal only)                |
 
 Capability flags are derived from `.role` but overridable per machine: add a `[data.overrides]`
-table to `~/.config/chezmoi/chezmoi.toml` (e.g. `rice = false`) to pin any of `gui`, `rice`,
-`cli_extras`, `terminal`.
+table to `~/.config/chezmoi/chezmoi.toml` (e.g. `rice = false`) to pin any of `rice`,
+`cli_extras`, or `terminal`.
 
 ## Conventions
 
 - Script numbering (`01-`, `02-`, etc.) controls execution order
 - `run_once_` scripts run once per rendered-content version; changing their contents can cause them to execute again. `run_onchange_` scripts re-run when their rendered contents change.
 - Scripts 01/02/03 run on macOS **and** Linux; 04 (macOS defaults) is darwin-only. Scripts 01-04 are templates guarded by an `{{ if ... .chezmoi.os ... }}` check; the empty SSH placeholder is an unguarded shell script.
-- Package script layers: Core CLI (always) → CLI extras (`cli_extras`) → macOS fonts → Rice (`rice`, macOS) → Terminal (`gui`, macOS) → Common GUI apps (`is_personal` or `is_work`) → Personal apps (`is_personal`) → MAS (`is_personal` && `install_mas`). On Linux only the Core + CLI-extras layers emit.
+- Package script layers: Core CLI (always) → CLI extras (`cli_extras`) → macOS fonts → Rice (`rice`, macOS) → Terminal (`terminal`, macOS) → Common GUI apps (`is_personal` or `is_work`) → Personal apps (`is_personal`) → MAS (`is_personal` && `install_mas`). On Linux only the Core + CLI-extras layers emit.
 - Homebrew package changes belong in `.chezmoiscripts/run_onchange_03-install-packages.sh.tmpl`. It uses `brew bundle --no-upgrade`, so applying a package-list change installs missing packages without upgrading existing ones.
 - JetBrains Mono and its Nerd Font variant are installed for every macOS role because the terminal configurations and SketchyBar depend on them.
 - Chrome, Outlook, and Slack are intentionally not installed on work machines; they are expected to be managed externally even though AeroSpace contains routing rules for them.

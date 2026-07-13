@@ -64,13 +64,11 @@ cask "nikitabobko/tap/aerospace", args: { no_quarantine: true }  # not notarized
 cask "karabiner-elements"
 {{ end -}}
 
-{{ if .gui -}}
 # -- Terminal emulator --
 {{ if eq .terminal "iterm2" -}}
 cask "iterm2"
-{{ else -}}
+{{ else if eq .terminal "kitty" -}}
 cask "kitty"
-{{ end -}}
 {{ end -}}
 
 {{ if or .is_personal .is_work -}}

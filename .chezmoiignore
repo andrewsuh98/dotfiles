@@ -7,9 +7,9 @@ README.md
 .config/sketchybar
 .config/karabiner
 {{ end -}}
-{{ if or (not .gui) (ne .terminal "kitty") -}}
+{{ if or (ne .chezmoi.os "darwin") (ne .terminal "kitty") -}}
 .config/kitty
 {{ end -}}
-{{ if or (not .gui) (ne .terminal "iterm2") -}}
+{{ if or (ne .chezmoi.os "darwin") (ne .terminal "iterm2") -}}
 .config/iterm2
 {{ end -}}

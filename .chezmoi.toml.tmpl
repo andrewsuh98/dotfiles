@@ -8,17 +8,24 @@
 {{- end -}}
 
 {{/*
-  Capability toggles, derived from $role. Each can be overridden per machine by
+  Machine settings, derived from $role. Each can be overridden per machine by
   adding a [data.overrides] table to ~/.config/chezmoi/chezmoi.toml, e.g.:
 
       [data.overrides]
       rice = false
       terminal = "iterm2"
 */}}
-{{- $gui        := dig "overrides" "gui"        (ne $role "server")                          . -}}
 {{- $rice       := dig "overrides" "rice"       (or (eq $role "personal") (eq $role "work")) . -}}
 {{- $cli_extras := dig "overrides" "cli_extras" true                                         . -}}
-{{- $terminal   := dig "overrides" "terminal"   (ternary "iterm2" "kitty" (eq $role "vm"))   . -}}
+
+{{/* Kitty is preferred on physical Macs; macOS VMs use iTerm2; servers use neither. */}}
+{{- $default_terminal := "none" -}}
+{{- if eq $role "vm" -}}
+{{-   $default_terminal = "iterm2" -}}
+{{- else if ne $role "server" -}}
+{{-   $default_terminal = "kitty" -}}
+{{- end -}}
+{{- $terminal := dig "overrides" "terminal" $default_terminal . -}}
 
 {{- $is_work     := eq $role "work" -}}
 {{- $is_personal := eq $role "personal" -}}
@@ -33,7 +40,6 @@
   name = {{ $name | quote }}
   email = {{ $email | quote }}
   role = {{ $role | quote }}
-  gui = {{ $gui | toToml }}
   rice = {{ $rice | toToml }}
   cli_extras = {{ $cli_extras | toToml }}
   is_work = {{ $is_work | toToml }}
