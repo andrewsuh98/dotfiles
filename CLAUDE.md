@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a **chezmoi** dotfiles repository, primarily for macOS (Apple Silicon) with lean headless Linux support. It manages configuration for zsh, neovim (LazyVim-based), tmux, kitty/iTerm2, karabiner, oh-my-posh, btop, fastfetch, and various CLI tools.
+This is a **chezmoi** dotfiles repository, primarily for macOS (Apple Silicon) with lean headless Linux support. It manages configuration for zsh, neovim (LazyVim-based), tmux, kitty/iTerm2, Karabiner/Hammerspoon, oh-my-posh, btop, fastfetch, and various CLI tools.
 
 Machines are described by a single `role` prompt, which derives a set of capability flags (see Template Data). The four roles are `personal`, `work`, and `vm` (all macOS) plus `server` (headless Linux, auto-selected off macOS).
 
@@ -36,7 +36,7 @@ chezmoi execute-template < some_file.tmpl  # test template rendering
 - **`private_*`** prefix sets restrictive permissions on the target
 - **`.tmpl`** suffix means the file is a Go template, rendered using data from `.chezmoi.toml.tmpl`
 - **`.chezmoi.toml.tmpl`** -- config template that prompts for: git name/email, machine `role` (macOS only), Mac App Store toggle (personal only). Derives the capability flags below.
-- **`.chezmoiignore`** -- excludes repo docs (`install.sh`, `CLAUDE.md`, `README.md`), and skips GUI/mac-only configs (aerospace, sketchybar, karabiner, kitty/iterm2) on machines that won't use them
+- **`.chezmoiignore`** -- excludes repo docs (`install.sh`, `CLAUDE.md`, `README.md`), skips GUI/mac-only configs on machines that won't use them, and selects the configured per-machine key remapper
 - **`.chezmoiscripts/`** -- ordered setup scripts that run during `chezmoi apply`:
   1. `run_once_01-install-homebrew.sh.tmpl` -- installs Homebrew (macOS + Linux; installs build prereqs on Linux)
   2. `run_once_02-install-ohmyzsh.sh.tmpl` -- installs oh-my-zsh (macOS + Linux)
@@ -53,16 +53,21 @@ Templates use `.chezmoi.toml` data accessed via Go template syntax (e.g., `{{ .n
 | `.name`         | string | Git user name                                                       |
 | `.email`        | string | Git email                                                           |
 | `.role`         | string | `personal`, `work`, `vm` (macOS) or `server` (Linux) -- the source of truth |
-| `.rice`         | bool   | Install window manager / bar / borders / karabiner (derived: personal or work) |
+| `.rice`         | bool   | Install window manager / bar / borders / key remapper (derived: personal or work) |
 | `.cli_extras`   | bool   | Install extended CLI tools (derived: true)                          |
 | `.terminal`     | string | `kitty` (personal/work), `iterm2` (vm), or `none` (server); overridable per machine |
+| `.key_remapper` | string | `karabiner` (default for rice), `hammerspoon`, or `none`; overridable per machine |
 | `.is_work`      | bool   | Work machine -- drives aerospace app routing (derived: role == work) |
 | `.is_personal`  | bool   | Personal machine -- gates personal-only apps (derived: role == personal) |
 | `.install_mas`  | bool   | Install Mac App Store apps (prompted, personal only)                |
 
-Capability flags are derived from `.role` but overridable per machine: add a `[data.overrides]`
-table to `~/.config/chezmoi/chezmoi.toml` (e.g. `rice = false`) to pin any of `rice`,
-`cli_extras`, or `terminal`.
+The Hammerspoon remapper uses `hidutil` for Caps/Control and Backslash/Backspace,
+so restricted Macs require one-time Accessibility and Input Monitoring approval
+for Hammerspoon. The config prompts once and can open the relevant settings pane.
+
+Capability settings are derived from `.role` but overridable per machine: add a `[data.overrides]`
+table to `~/.config/chezmoi/chezmoi.toml` (e.g. `rice = false` or
+`key_remapper = "hammerspoon"`) to pin `rice`, `cli_extras`, `terminal`, or `key_remapper`.
 
 ## Conventions
 

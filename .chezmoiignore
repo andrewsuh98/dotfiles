@@ -7,6 +7,13 @@ README.md
 .config/sketchybar
 .config/karabiner
 {{ end -}}
+{{- $key_remapper := dig "key_remapper" (ternary "hammerspoon" "karabiner" .is_work) . -}}
+{{ if ne $key_remapper "karabiner" -}}
+.config/karabiner
+{{ end -}}
+{{ if ne $key_remapper "hammerspoon" -}}
+.hammerspoon
+{{ end -}}
 {{ if or (ne .chezmoi.os "darwin") (ne .terminal "kitty") -}}
 .config/kitty
 {{ end -}}

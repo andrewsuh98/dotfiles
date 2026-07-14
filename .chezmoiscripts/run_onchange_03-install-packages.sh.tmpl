@@ -61,7 +61,12 @@ brew "sketchybar"
 brew "borders"  # JankyBorders — window border highlight, bootstrapped by aerospace
 brew "nowplaying-cli"
 cask "nikitabobko/tap/aerospace", args: { no_quarantine: true }  # not notarized; skip Gatekeeper quarantine (no sudo needed)
+{{ $key_remapper := dig "key_remapper" (ternary "hammerspoon" "karabiner" .is_work) . -}}
+{{ if eq $key_remapper "hammerspoon" -}}
+cask "hammerspoon"  # requires Accessibility + Input Monitoring, but no virtual HID driver
+{{ else if eq $key_remapper "karabiner" -}}
 cask "karabiner-elements"
+{{ end -}}
 {{ end -}}
 
 # -- Terminal emulator --

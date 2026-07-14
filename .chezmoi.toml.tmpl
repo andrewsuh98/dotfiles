@@ -14,9 +14,17 @@
       [data.overrides]
       rice = false
       terminal = "iterm2"
+      key_remapper = "hammerspoon"
 */}}
 {{- $rice       := dig "overrides" "rice"       (or (eq $role "personal") (eq $role "work")) . -}}
 {{- $cli_extras := dig "overrides" "cli_extras" true                                         . -}}
+
+{{/* Karabiner is preferred; restricted Macs can opt into Hammerspoon. */}}
+{{- $default_key_remapper := "none" -}}
+{{- if and $rice (eq .chezmoi.os "darwin") -}}
+{{-   $default_key_remapper = "karabiner" -}}
+{{- end -}}
+{{- $key_remapper := dig "overrides" "key_remapper" $default_key_remapper . -}}
 
 {{/* Kitty is preferred on physical Macs; macOS VMs use iTerm2; servers use neither. */}}
 {{- $default_terminal := "none" -}}
@@ -45,4 +53,5 @@
   is_work = {{ $is_work | toToml }}
   is_personal = {{ $is_personal | toToml }}
   terminal = {{ $terminal | quote }}
+  key_remapper = {{ $key_remapper | quote }}
   install_mas = {{ $install_mas | toToml }}
