@@ -1,0 +1,72 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "cleanupPeriodDays": 365,
+  "env": {
+    "DISABLE_ERROR_REPORTING": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
+  },
+  "permissions": {
+    "allow": [],
+    "deny": [
+      "Read(~/.ssh/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.azure/**)",
+      "Read(~/.config/gh/**)",
+      "Read(~/.git-credentials)",
+      "Read(~/.docker/config.json)",
+      "Read(~/.kube/**)",
+      "Read(~/.npmrc)",
+      "Read(~/.pypirc)",
+      "Read(~/.gem/credentials)",
+      "Read(~/Library/Keychains/**)",
+      "Edit(~/.ssh/**)",
+      "Edit(~/.zshrc)",
+      "Edit(~/.bashrc)"
+    ],
+    "defaultMode": "auto"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/block-dangerous-bash.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "model": "opus",
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); cwd=$(echo \"$cwd\" | sed \"s|^$HOME|~|\"); path_seg=$(printf \"\\033[1;36m%s\\033[0m\" \"$cwd\"); git_seg=\"\"; if git -C \"$cwd\" rev-parse --git-dir > /dev/null 2>&1; then branch=$(git -C \"$cwd\" -c core.useBuiltinFSMonitor=false rev-parse --abbrev-ref HEAD 2>/dev/null); git_status=$(git -C \"$cwd\" -c core.useBuiltinFSMonitor=false status --porcelain 2>/dev/null); if [ -n \"$git_status\" ]; then color=\"\\033[33m\"; else color=\"\\033[32m\"; fi; staged=$(echo \"$git_status\" | grep -c \"^[MADRCU]\" || echo 0); unstaged=$(echo \"$git_status\" | grep -c \"^.[MADRCU]\" || echo 0); status_str=\"\"; if [ \"$unstaged\" -gt 0 ]; then status_str=\" ~${unstaged}\"; fi; if [ \"$staged\" -gt 0 ]; then status_str=\"${status_str} +${staged}\"; fi; git_seg=$(printf \" %b%s%s\\033[0m\" \"$color\" \"$branch\" \"$status_str\"); fi; py_seg=\"\"; if [ -n \"$VIRTUAL_ENV\" ]; then venv=$(basename \"$VIRTUAL_ENV\"); pyver=$(python3 --version 2>&1 | awk '{print $2}'); py_seg=$(printf \" \\033[33m %s %s\\033[0m\" \"$venv\" \"$pyver\"); fi; echo \"${path_seg}${git_seg}${py_seg}\""
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true
+  },
+  "effortLevel": "xhigh",
+  "autoUpdatesChannel": "latest",
+  "editorMode": "vim",
+  "verbose": true,
+  "preferredNotifChannel": "{{ if eq .terminal "kitty" }}kitty{{ else if eq .terminal "iterm2" }}iterm2{{ else }}auto{{ end }}",
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true
+}
