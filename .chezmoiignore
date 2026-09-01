@@ -1,6 +1,6 @@
-install.sh
-CLAUDE.md
-README.md
+/install.sh
+/CLAUDE.md
+/README.md
 
 {{ if not .rice -}}
 .config/aerospace
