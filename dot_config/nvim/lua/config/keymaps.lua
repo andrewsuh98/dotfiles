@@ -25,6 +25,9 @@ map("n", "<C-w>m", "<C-w>_", { desc = "Max out height" })
 map("n", "<C-w>M", "<C-w>|", { desc = "Max out width" })
 map("n", "<C-w>c", "<cmd>close<cr>", { desc = "Close window" })
 
+-- split below with <C-w>- to match herdr/tmux (<C-w>v already splits right)
+map("n", "<C-w>-", "<cmd>split<cr>", { desc = "Split window below" })
+
 -- Increment/decrement
 map("n", "+", "<C-a>", { desc = "Increment number" })
 map("n", "-", "<C-x>", { desc = "Decrement number" })
