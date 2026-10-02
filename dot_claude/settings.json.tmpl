@@ -40,6 +40,18 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '{{ .chezmoi.homeDir }}/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   },
   "model": "opus",
@@ -64,7 +76,7 @@
   "effortLevel": "xhigh",
   "autoUpdatesChannel": "latest",
   "editorMode": "vim",
-  "verbose": true,
+  "verbose": false,
   "preferredNotifChannel": "{{ if eq .terminal "kitty" }}kitty{{ else if eq .terminal "iterm2" }}iterm2{{ else }}auto{{ end }}",
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
