@@ -82,7 +82,7 @@ prefix = "ctrl+t" # match tmux
 # settings = "prefix+s"
 detach = "prefix+d" # match tmux
 # reload_config = "prefix+shift+r"
-# open_notification_target = "prefix+o"
+open_notification_target = "" # prefix+o opens herdr-navigator instead
 # workspace_picker = "prefix+w"
 # goto = "prefix+g"
 # new_workspace = "prefix+shift+n"
@@ -152,6 +152,14 @@ detach = "prefix+d" # match tmux
 # command = "lazygit"
 # width = "80%"
 # height = "80%"
+
+# Fuzzy jump to any workspace, agent, project, or directory. Requires the
+# herdr-navigator plugin: herdr plugin install thanhdat77/herdr-navigator
+[[keys.command]]
+key = "prefix+o"
+type = "plugin_action"
+command = "herdr-navigator.open"
+description = "jump to anything"
 
 # Vim-aware pane navigation (vim-tmux-navigator for herdr).
 # navigate.sh forwards the chord into the pane when Vim/Neovim is in the
