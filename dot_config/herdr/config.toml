@@ -165,6 +165,13 @@ type = "plugin_action"
 command = "herdr-navigator.open"
 description = "jump to anything"
 
+# Even out pane sizes in the current tab (like tmux prefix+E)
+[[keys.command]]
+key = "prefix+="
+type = "shell"
+command = "\"$HOME/.config/herdr/equalize.sh\""
+description = "equalize panes"
+
 # Vim-aware pane navigation (vim-tmux-navigator for herdr).
 # navigate.sh forwards the chord into the pane when Vim/Neovim is in the
 # foreground, otherwise it moves herdr focus. Neovim hands focus back to
