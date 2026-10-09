@@ -1,0 +1,26 @@
+{{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") -}}
+#!/bin/bash
+set -euo pipefail
+
+# Ensure brew is on PATH (prefix differs by OS)
+{{ if eq .chezmoi.os "darwin" -}}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ else -}}
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ end -}}
+
+# GitHub plugins as owner/repo@ref. herdr has no plugin update, so bump the
+# ref here to reinstall; plugins already at their ref are skipped.
+plugins=(
+  thanhdat77/herdr-navigator@v0.3.3
+)
+installed="$(herdr plugin list)"
+for p in "${plugins[@]}"; do
+  grep -qF "[github:$p]" <<<"$installed" \
+    || herdr plugin install "${p%@*}" --ref "${p#*@}" --yes
+done
+
+# Writes ~/.claude/hooks/herdr-agent-state.sh. The SessionStart entry it would
+# add to settings.json is already managed there, so herdr leaves that file alone.
+herdr integration install claude
+{{ end -}}

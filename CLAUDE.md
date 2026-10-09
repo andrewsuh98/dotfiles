@@ -43,6 +43,7 @@ chezmoi execute-template < some_file.tmpl  # test template rendering
   3. `run_onchange_03-install-packages.sh.tmpl` -- Brewfile (runs on change, not just once); layered by capability flag
   4. `run_once_04-configure-macos.sh.tmpl` -- macOS defaults (Finder, Dock, keyboard, trackpad); macOS only
   5. `run_once_05-setup-ssh.sh` -- intentionally empty SSH key placeholder for future setup
+  6. `run_onchange_after_06-setup-herdr.sh.tmpl` -- installs herdr plugins (pinned refs) and the Claude integration hook script; runs after files are applied (macOS + Linux)
 
 ## Template Data
 
@@ -68,7 +69,7 @@ table to `~/.config/chezmoi/chezmoi.toml` (e.g. `rice = false`) to pin any of `r
 
 - Script numbering (`01-`, `02-`, etc.) controls execution order
 - `run_once_` scripts run once per rendered-content version; changing their contents can cause them to execute again. `run_onchange_` scripts re-run when their rendered contents change.
-- Scripts 01/02/03 run on macOS **and** Linux; 04 (macOS defaults) is darwin-only. Scripts 01-04 are templates guarded by an `{{ if ... .chezmoi.os ... }}` check; the empty SSH placeholder is an unguarded shell script.
+- Scripts 01/02/03/06 run on macOS **and** Linux; 04 (macOS defaults) is darwin-only. Scripts 01-04 and 06 are templates guarded by an `{{ if ... .chezmoi.os ... }}` check; the empty SSH placeholder is an unguarded shell script.
 - Package script layers: Core CLI (always) → CLI extras (`cli_extras`) → macOS fonts → Rice (`rice`, macOS) → Terminal (`terminal`, macOS) → Common GUI apps (`is_personal` or `is_work`) → Personal apps (`is_personal`) → MAS (`is_personal` && `install_mas`). On Linux only the Core + CLI-extras layers emit.
 - Homebrew package changes belong in `.chezmoiscripts/run_onchange_03-install-packages.sh.tmpl`. It uses `brew bundle --no-upgrade`, so applying a package-list change installs missing packages without upgrading existing ones.
 - JetBrains Mono and its Nerd Font variant are installed for every macOS role because the terminal configurations and SketchyBar depend on them.
