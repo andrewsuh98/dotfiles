@@ -22,7 +22,10 @@ fi
 {{ end -}}
 
 if ! command -v brew &>/dev/null; then
-  echo "Installing Homebrew..."
+  echo "Installing Homebrew (needs your password)..."
+  # NONINTERACTIVE makes the installer use 'sudo -n', which fails unless
+  # credentials are cached, so prompt for them once up front.
+  sudo -v
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
