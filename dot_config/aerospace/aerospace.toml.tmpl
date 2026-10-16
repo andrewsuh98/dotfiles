@@ -132,7 +132,7 @@ M = 'built-in' # Messaging
 # | Binding | App              | Mnemonic     |
 # |---------|------------------|--------------|
 # | alt-B   | Arc / Chrome*    | Browser      |
-# | alt-T   | Kitty            | Terminal     |
+# | alt-T   | Kitty / iTerm2   | Terminal     |
 # | alt-I   | VS Code          | IDE          |
 # | alt-E   | Spark / Outlook* | Email        |
 # | alt-D   | Things3          | to-Do        |
@@ -186,7 +186,7 @@ if.app-id = 'company.thebrowser.Browser'
 run = 'move-node-to-workspace B'
 
 [[on-window-detected]]
-if.app-id = 'net.kovidgoyal.kitty'
+if.app-id = '{{ if eq .terminal "iterm2" }}com.googlecode.iterm2{{ else }}net.kovidgoyal.kitty{{ end }}'
 run = 'move-node-to-workspace T'
 
 [[on-window-detected]]
@@ -349,7 +349,7 @@ alt-p = 'workspace P'
 alt-q = 'workspace Q'
 alt-r = 'workspace R'
 alt-s = 'workspace S'
-alt-t = ['workspace T', 'exec-and-forget open -a "kitty"']
+alt-t = ['workspace T', 'exec-and-forget open -a "{{ if eq .terminal "iterm2" }}iTerm{{ else }}kitty{{ end }}"']
 alt-u = 'workspace U'
 alt-v = 'workspace V'
 alt-w = 'workspace W'
