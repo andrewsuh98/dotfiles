@@ -94,14 +94,19 @@ cask "keyboardcleantool"
 cask "monitorcontrol"
 cask "soundsource"
 brew "mas"
-
-{{ if .install_mas -}}
-# -- Mac App Store --
-mas "Fantastical", id: 975937182
-mas "Spark", id: 1176895641
-mas "Things", id: 904280696
-{{ end -}}
 {{ end -}}
 {{ end -}}
 EOF
+
+{{ if and (eq .chezmoi.os "darwin") .is_personal .install_mas -}}
+# -- Mac App Store --
+# Needs an App Store sign-in. Kept in its own bundle so a signed-out machine
+# still finishes the apply instead of failing the whole script.
+brew bundle --no-upgrade --file=/dev/stdin <<EOF \
+  || echo "Warning: Mac App Store installs failed. Sign into the App Store, then run: mas install 975937182 1176895641 904280696" >&2
+mas "Fantastical", id: 975937182
+mas "Spark", id: 1176895641
+mas "Things", id: 904280696
+EOF
+{{ end -}}
 {{ end -}}
