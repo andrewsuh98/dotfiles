@@ -1,6 +1,9 @@
 [user]
 	name = {{ .name }}
 	email = {{ .email }}
+[hook "strip-claude-coauthor"]
+	event = commit-msg
+	command = {{ .chezmoi.homeDir }}/.config/git/hooks/strip-claude-coauthor
 [init]
 	defaultBranch = main
 [push]

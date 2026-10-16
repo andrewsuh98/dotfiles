@@ -1,0 +1,13 @@
+#!/bin/sh
+# commit-msg hook (wired up via hook.* in ~/.gitconfig): drop Claude
+# co-author trailers so Claude never appears as a GitHub contributor,
+# whichever tool or machine made the commit.
+msg_file=$1
+pattern='^co-authored-by:[[:space:]]*(claude([[:space:]<]|$)|.*@anthropic\.com>)'
+
+if grep -qiE "$pattern" "$msg_file"; then
+  tmp=$(mktemp) || exit 1
+  grep -viE "$pattern" "$msg_file" | git stripspace >"$tmp" && cat "$tmp" >"$msg_file"
+  rm -f "$tmp"
+fi
+exit 0

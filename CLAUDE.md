@@ -73,6 +73,7 @@ table to `~/.config/chezmoi/chezmoi.toml` (e.g. `rice = false`) to pin any of `r
 - Package script layers: Core CLI (always) → CLI extras (`cli_extras`) → macOS fonts → Rice (`rice`, macOS) → Terminal (`terminal`, macOS) → Common GUI apps (`is_personal` or `is_work`) → Personal apps (`is_personal`) → MAS (`is_personal` && `install_mas`). On Linux only the Core + CLI-extras layers emit.
 - Homebrew package changes belong in `.chezmoiscripts/run_onchange_03-install-packages.sh.tmpl`. It uses `brew bundle --no-upgrade`, so applying a package-list change installs missing packages without upgrading existing ones.
 - JetBrains Mono and its Nerd Font variant are installed for every macOS role because the terminal configurations and SketchyBar depend on them.
+- `~/.gitconfig` registers a config-based `commit-msg` hook (`hook.strip-claude-coauthor`, git 2.54+) that runs `~/.config/git/hooks/strip-claude-coauthor` to drop Claude co-author trailers. Config-based hooks run alongside each repo's own `.git/hooks` and local `core.hooksPath`, so don't switch this to a global `core.hooksPath`, which would disable repo-local hooks like git-lfs.
 - Chrome, Outlook, and Slack are intentionally not installed on work machines; they are expected to be managed externally even though AeroSpace contains routing rules for them.
 - The `install.sh` at the root is a bootstrap script for fresh machines (not managed by chezmoi itself)
 - Neovim config under `dot_config/nvim/` follows LazyVim structure: `lua/config/` for core settings, `lua/plugins/` for plugin specs
