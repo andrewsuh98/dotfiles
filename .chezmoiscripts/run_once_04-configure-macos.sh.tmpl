@@ -69,6 +69,13 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 # Natural scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 
+{{ if eq .terminal "iterm2" -}}
+# ── iTerm2 ───────────────────────────────────
+# Load settings from the chezmoi-managed folder instead of ~/Library/Preferences
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$HOME/.config/iterm2"
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+
+{{ end -}}
 # ── Apply changes ─────────────────────────────
 killall Finder 2>/dev/null || true
 killall Dock 2>/dev/null || true
