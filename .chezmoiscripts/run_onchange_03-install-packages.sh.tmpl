@@ -63,7 +63,7 @@ tap "FelixKratz/formulae"
 brew "sketchybar"
 brew "borders"  # JankyBorders — window border highlight, bootstrapped by aerospace
 brew "nowplaying-cli"
-cask "nikitabobko/tap/aerospace", args: { no_quarantine: true }  # not notarized; skip Gatekeeper quarantine (no sudo needed)
+cask "nikitabobko/tap/aerospace"  # not notarized; the cask strips the quarantine flag itself
 cask "karabiner-elements"
 {{ end -}}
 
