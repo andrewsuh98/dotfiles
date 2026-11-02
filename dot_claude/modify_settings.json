@@ -1,3 +1,24 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /*
+  Merges the settings below into the live ~/.claude/settings.json instead of
+  replacing it, so changes Claude Code writes itself (/plugin, /model) survive
+  `chezmoi apply`. Every top-level key below is owned and overwritten on apply,
+  except enabledPlugins, which is merged per plugin. Keys not listed here are
+  left alone. Removing a key or plugin here does not remove it from machines
+  that already have it. The chezmoi:modify-template marker above is what makes
+  the live file available as .chezmoi.stdin; don't add a .tmpl suffix.
+*/ -}}
+{{- $current := dict -}}
+{{- if trim .chezmoi.stdin -}}
+{{-   $current = fromJson .chezmoi.stdin -}}
+{{- end -}}
+{{- $notif := "auto" -}}
+{{- if eq .terminal "kitty" -}}
+{{-   $notif = "kitty" -}}
+{{- else if eq .terminal "iterm2" -}}
+{{-   $notif = "iterm2" -}}
+{{- end -}}
+{{- $managed := `
 {
   "cleanupPeriodDays": 365,
   "env": {
@@ -47,7 +68,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '{{ .chezmoi.homeDir }}/.claude/hooks/herdr-agent-state.sh' session",
+            "command": "bash '__HOME__/.claude/hooks/herdr-agent-state.sh' session",
             "timeout": 10
           }
         ]
@@ -68,9 +89,25 @@
   "autoUpdatesChannel": "latest",
   "editorMode": "vim",
   "verbose": false,
-  "preferredNotifChannel": "{{ if eq .terminal "kitty" }}kitty{{ else if eq .terminal "iterm2" }}iterm2{{ else }}auto{{ end }}",
+  "preferredNotifChannel": "__NOTIF_CHANNEL__",
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true
 }
+` | replace "__HOME__" .chezmoi.homeDir | replace "__NOTIF_CHANNEL__" $notif | fromJson -}}
+{{- range $key, $value := $managed -}}
+{{-   if eq $key "enabledPlugins" -}}
+{{-     $plugins := dict -}}
+{{-     if hasKey $current "enabledPlugins" -}}
+{{-       $plugins = index $current "enabledPlugins" -}}
+{{-     end -}}
+{{-     range $plugin, $enabled := $value -}}
+{{-       $_ := set $plugins $plugin $enabled -}}
+{{-     end -}}
+{{-     $_ := set $current $key $plugins -}}
+{{-   else -}}
+{{-     $_ := set $current $key $value -}}
+{{-   end -}}
+{{- end -}}
+{{ toPrettyJson $current }}
