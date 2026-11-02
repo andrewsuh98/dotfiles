@@ -20,6 +20,16 @@ If you enable Mac App Store apps, sign into the App Store first. Otherwise those
 skipped with a warning that prints the `mas install` command to run later. Rerunning the
 bootstrap command pulls the latest dotfiles and applies them.
 
+## After bootstrap
+
+A few steps need you. macOS prompts for most of them as each app first starts.
+
+- Run `gh auth login` so git can use your GitHub credentials.
+- Allow AeroSpace under Accessibility (personal and work).
+- Approve the Karabiner-Elements driver extension and Input Monitoring (personal and work).
+- Allow SketchyBar to control Things, for the to-do item (personal and work).
+- Log out and back in so settings like key repeat take effect.
+
 ---
 
 Ported from a git bare dotfiles repo, archived at https://github.com/andrewsuh98/dotfiles-bare.
