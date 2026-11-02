@@ -46,3 +46,11 @@
   is_personal = {{ $is_personal | toToml }}
   terminal = {{ $terminal | quote }}
   install_mas = {{ $install_mas | toToml }}
+{{- /* Write overrides back, or the next 'chezmoi init' would drop them. */}}
+{{- with get . "overrides" }}
+
+[data.overrides]
+{{-   range $key, $value := . }}
+  {{ $key }} = {{ if kindIs "string" $value }}{{ $value | quote }}{{ else }}{{ $value | toToml }}{{ end }}
+{{-   end }}
+{{- end }}
