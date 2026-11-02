@@ -43,9 +43,6 @@ sketchybar --add event aerospace_focus_change
 source "$ITEM_DIR/spaces.sh"
 source "$ITEM_DIR/front_app.sh"
 
-# Center items
-source "$ITEM_DIR/media.sh"
-
 # Right items (added right-to-left, so clock appears rightmost)
 source "$ITEM_DIR/clock.sh"
 source "$ITEM_DIR/wifi.sh"
