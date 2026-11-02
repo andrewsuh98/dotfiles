@@ -1,24 +1,12 @@
 # Load Homebrew (prefix differs by OS; skip if not installed)
 {{ if eq .chezmoi.os "darwin" -}}
-eval "$(/opt/homebrew/bin/brew shellenv)"
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 {{ else -}}
 [ -d /home/linuxbrew/.linuxbrew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 {{ end -}}
 
 # Add ~/.local/bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
-
-# Export path and load oh-my-zsh
-export ZSH="$HOME/.oh-my-zsh"
-[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
-
-# Load oh-my-posh
-if command -v oh-my-posh &>/dev/null && [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-  eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/minimal.toml)"
-fi
-
-# Export .env file for secrets
-[ -f ~/.env ] && source ~/.env
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -84,6 +72,19 @@ plugins=(
     git
     )
 
+# Load oh-my-zsh after the settings above (zstyle, HIST_STAMPS, plugins), which
+# it reads when sourced. It also runs compinit.
+export ZSH="$HOME/.oh-my-zsh"
+[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
+
+# Load oh-my-posh
+if command -v oh-my-posh &>/dev/null && [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/minimal.toml)"
+fi
+
+# Export .env file for secrets
+[ -f ~/.env ] && source ~/.env
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -108,8 +109,8 @@ fi
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 alias nv="nvim"
-alias zshconfig="chezmoi --watch ~/.zshrc"
-alias nvimconfig="chezmoi --watch ~/.config/nvim/"
+alias zshconfig="chezmoi edit --watch ~/.zshrc"
+alias nvimconfig="chezmoi edit --watch ~/.config/nvim/"
 {{ if eq .chezmoi.os "darwin" -}}
 alias chrome="open -a 'Google Chrome'"
 alias arc="open -a 'Arc'"
@@ -134,15 +135,9 @@ alias lta1="eza --long --git --no-filesize --no-time --icons --no-user --no-perm
 alias lta2="eza --long --git --no-filesize --no-time --icons --no-user --no-permissions --tree --level=2 -all"
 alias lta3="eza --long --git --no-filesize --no-time --icons --no-user --no-permissions --tree --level=3 -all"
 
-# zsh-syntax-highlighting / zsh-autosuggestions plugins (via brew)
-if command -v brew &>/dev/null; then
-  brew_prefix="$(brew --prefix)"
-  [ -f "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] \
-    && source "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-  [ -f "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] \
-    && source "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-  unset brew_prefix
-fi
+# zsh-autosuggestions plugin (via brew)
+[ -n "$HOMEBREW_PREFIX" ] && [ -f "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] \
+  && source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # Set up fzf key bindings and fuzzy completion
 if command -v fzf &>/dev/null; then
@@ -157,14 +152,6 @@ command -v thefuck &>/dev/null && eval $(thefuck --alias)
 # Setup uv autocomplete
 command -v uv &>/dev/null && eval "$(uv generate-shell-completion zsh)"
 
-# zsh completions (load after plugins, rebuild cache once per day)
-autoload -Uz compinit
-if [ "$(find ~/.zcompdump -mtime +1 2>/dev/null)" ] || [ ! -f ~/.zcompdump ]; then
-    compinit
-else
-    compinit -C
-fi
-
 # zoxide (smart cd)
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
@@ -176,3 +163,8 @@ function y() {
 	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
 }
+
+# zsh-syntax-highlighting (via brew). Must be sourced last so it wraps every
+# widget defined above.
+[ -n "$HOMEBREW_PREFIX" ] && [ -f "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] \
+  && source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
