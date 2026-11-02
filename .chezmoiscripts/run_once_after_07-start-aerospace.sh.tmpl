@@ -1,0 +1,9 @@
+{{ if and (eq .chezmoi.os "darwin") .rice -}}
+#!/bin/bash
+set -euo pipefail
+
+# AeroSpace starts itself at login after its first launch (start-at-login), and
+# its after-startup-command starts SketchyBar and borders. Launch it once here
+# so a fresh machine doesn't need a logout. macOS asks for Accessibility access.
+pgrep -xq AeroSpace || open -a AeroSpace
+{{ end -}}

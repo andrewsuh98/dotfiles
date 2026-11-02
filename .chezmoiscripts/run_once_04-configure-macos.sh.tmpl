@@ -13,7 +13,7 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 # ── Finder ────────────────────────────────────
 # Show all file extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-# Show hidden files
+# Keep hidden files hidden (Cmd+Shift+. toggles them in Finder)
 defaults write com.apple.finder AppleShowAllFiles -bool false
 # Show path bar at bottom of Finder
 defaults write com.apple.finder ShowPathbar -bool true
@@ -69,6 +69,13 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 # Natural scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 
+{{ if .rice -}}
+# ── Menu bar ─────────────────────────────────
+# Always auto-hide the native menu bar so SketchyBar can take its place
+defaults write NSGlobalDomain _HIHideMenuBar -bool true
+defaults write com.apple.controlcenter AutoHideMenuBarOption -int 0  # macOS 26 setting; 0 = Always
+
+{{ end -}}
 {{ if eq .terminal "iterm2" -}}
 # ── iTerm2 ───────────────────────────────────
 # Load settings from the chezmoi-managed folder instead of ~/Library/Preferences
