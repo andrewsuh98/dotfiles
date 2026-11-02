@@ -1,0 +1,11 @@
+{{- /* Rendered from the installed herdr so the skill always matches its CLI.
+       Calls herdr by its Homebrew path, like the setup scripts, because
+       chezmoi's PATH predates Homebrew on a fresh machine. Empty, and so
+       skipped by chezmoi, until herdr is installed. */ -}}
+{{- $herdr := "/home/linuxbrew/.linuxbrew/bin/herdr" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $herdr = "/opt/homebrew/bin/herdr" -}}
+{{- end -}}
+{{- if stat $herdr -}}
+{{ output $herdr "--skill" }}
+{{- end -}}
