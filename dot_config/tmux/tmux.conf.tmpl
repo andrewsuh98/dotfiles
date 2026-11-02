@@ -73,7 +73,12 @@ setw -g window-status-separator ""
 ### Tmux Plugin Manager Plugins
 
 set -g @plugin 'tmux-plugins/tpm'
+{{- if eq .chezmoi.os "darwin" }}
 set -g @plugin 'tmux-plugins/tmux-yank'
+{{- else }}
+# No clipboard tool on a headless server: copy over OSC 52 to the local terminal
+set -g set-clipboard on
+{{- end }}
 set -g @plugin 'christoomey/vim-tmux-navigator'
 
 # tmux-resurrect
@@ -84,9 +89,11 @@ set -g @plugin 'tmux-plugins/tmux-resurrect'
 
 # tmux-continuum
 set -g @plugin 'tmux-plugins/tmux-continuum'
+{{- if and (eq .chezmoi.os "darwin") (ne .terminal "none") }}
   # automatic tmux start on boot
   set -g @continuum-boot 'on'
-  set -g @continuum-boot-options 'kitty'
+  set -g @continuum-boot-options '{{ if eq .terminal "iterm2" }}iterm{{ else }}kitty{{ end }}'
+{{- end }}
   # automatic restore tmux environment
   set -g @continuum-restore 'on'
 
@@ -95,9 +102,12 @@ set -g @plugin 'omerxx/tmux-sessionx'
   set -g @sessionx-bind 'o'
   set -g @sessionx-layout 'default'  # 'reverse'
 
-# Auto-install plugins on first launch if missing
-if "test ! -d ~/.config/tmux/plugins/tmux-yank" \
-   "run '$HOMEBREW_PREFIX/opt/tpm/share/tpm/bin/install_plugins'"
+# Auto-install plugins on first launch if missing. install_plugins reads the
+# plugin path tpm would set, so set it first.
+{{- $tpm := printf "%s/opt/tpm/share/tpm" (ternary "/opt/homebrew" "/home/linuxbrew/.linuxbrew" (eq .chezmoi.os "darwin")) }}
+set-environment -g TMUX_PLUGIN_MANAGER_PATH "{{ .chezmoi.homeDir }}/.config/tmux/plugins/"
+if "test ! -d ~/.config/tmux/plugins/vim-tmux-navigator" \
+   "run '{{ $tpm }}/bin/install_plugins'"
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-run '$HOMEBREW_PREFIX/opt/tpm/share/tpm/tpm'
+run '{{ $tpm }}/tpm'
