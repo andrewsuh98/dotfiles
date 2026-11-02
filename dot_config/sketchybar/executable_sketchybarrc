@@ -18,7 +18,7 @@ sketchybar --bar \
   y_offset=0 \
   shadow=off \
   padding_left=8 \
-  padding_right=8
+  padding_right=24 # clears the macOS mic/camera privacy dot in the top-right corner
 
 # Default item properties
 default=(
