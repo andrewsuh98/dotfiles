@@ -74,6 +74,8 @@ defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 # Always auto-hide the native menu bar so SketchyBar can take its place
 defaults write NSGlobalDomain _HIHideMenuBar -bool true
 defaults write com.apple.controlcenter AutoHideMenuBarOption -int 0  # macOS 26 setting; 0 = Always
+# Show menu bar background, so the revealed menu bar covers SketchyBar instead of blending with it
+defaults write NSGlobalDomain SLSMenuBarUseBlurredAppearance -bool true
 
 {{ end -}}
 {{ if eq .terminal "iterm2" -}}
