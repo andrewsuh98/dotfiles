@@ -22,13 +22,13 @@ bootstrap command pulls the latest dotfiles and applies them.
 
 ## After bootstrap
 
-A few steps need you. macOS prompts for most of them as each app first starts.
+A few steps stay manual. macOS prompts for most of them the first time each app starts.
 
-- Run `gh auth login` so git can use your GitHub credentials.
-- Allow AeroSpace under Accessibility (personal and work).
-- Approve the Karabiner-Elements driver extension and Input Monitoring (personal and work).
-- Allow SketchyBar to control Things, for the to-do item (personal and work).
-- Log out and back in so settings like key repeat take effect.
+- GitHub CLI authenticated with `gh auth login`, so git can use the GitHub credentials.
+- AeroSpace allowed under Accessibility (personal and work).
+- Karabiner-Elements driver extension and Input Monitoring approved (personal and work).
+- SketchyBar allowed to control Things, for the to-do item (personal and work).
+- A logout and login done, so settings like key repeat take effect.
 
 ---
 
