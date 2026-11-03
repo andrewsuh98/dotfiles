@@ -24,12 +24,12 @@ final_space = true
   alignment = 'left'
   newline = true
 
-  # [[blocks.segments]]
-  #   type = 'session'
-  #   template = '{{ if .SSHSession }} {{ end }}{{ .UserName }}@{{ .HostName }} '
-  #   style = 'plain'
-  #   foreground = 'white'
-  #   background = 'transparent'
+  [[blocks.segments]]
+    type = 'session'
+    template = '{{ if .SSHSession }} {{ .UserName }}@{{ .HostName }} {{ end }}'
+    style = 'plain'
+    foreground = 'white'
+    background = 'transparent'
 
   [[blocks.segments]]
     type = 'root'
