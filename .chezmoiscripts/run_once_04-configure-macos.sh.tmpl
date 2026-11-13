@@ -69,6 +69,14 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 # Natural scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 
+# ── Power ────────────────────────────────────
+# Prevent automatic sleeping on power adapter when the display is off
+# Check first so re-runs skip the sudo prompt when it's already set
+ac_sleep=$(pmset -g custom | awk '/^AC Power:/{ac=1; next} /^[^ ]/{ac=0} ac && $1 == "sleep" {print $2}')
+if [ "$ac_sleep" != "0" ]; then
+  sudo pmset -c sleep 0
+fi
+
 {{ if .rice -}}
 # ── Menu bar ─────────────────────────────────
 # Always auto-hide the native menu bar so SketchyBar can take its place
