@@ -133,6 +133,7 @@ M = 'built-in' # Messaging
 # |---------|------------------|--------------|
 # | alt-B   | Arc / Chrome*    | Browser      |
 # | alt-T   | Kitty / iTerm2   | Terminal     |
+# | alt-F   | yazi (kitty)     | Files        |
 # | alt-I   | VS Code          | IDE          |
 # | alt-E   | Spark / Outlook* | Email        |
 # | alt-D   | Things3          | to-Do        |
@@ -184,7 +185,14 @@ if.app-id = 'com.google.Chrome'
 if.app-id = 'company.thebrowser.Browser'
 {{ end -}}
 run = 'move-node-to-workspace B'
-
+{{ if eq .terminal "kitty" }}
+# The dedicated yazi window (see yazi-window.sh) is a kitty window titled
+# "yazi". This rule must stay above the general kitty rule: first match wins.
+[[on-window-detected]]
+if.app-id = 'net.kovidgoyal.kitty'
+if.window-title-regex-substring = '^yazi$'
+run = 'move-node-to-workspace F'
+{{ end }}
 [[on-window-detected]]
 if.app-id = '{{ if eq .terminal "iterm2" }}com.googlecode.iterm2{{ else }}net.kovidgoyal.kitty{{ end }}'
 run = 'move-node-to-workspace T'
@@ -335,7 +343,11 @@ alt-e = 'workspace E'
 {{ else -}}
 alt-e = ['workspace E', 'exec-and-forget open -a "Spark Desktop"']
 {{ end -}}
+{{ if eq .terminal "kitty" -}}
+alt-f = ['workspace F', 'exec-and-forget ~/.config/aerospace/yazi-window.sh']
+{{ else -}}
 alt-f = 'workspace F'
+{{ end -}}
 alt-g = 'workspace G'
 alt-i = ['workspace I', 'exec-and-forget open -a "Visual Studio Code"']
 {{ if .is_work -}}
