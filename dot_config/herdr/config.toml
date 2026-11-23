@@ -28,9 +28,11 @@ auto_switch = false
 # red = "#ff6188"
 # green = "#a6e3a1"
 
-# Dim unfocused pane borders and muted UI text
 [theme.custom]
-overlay0 = "darkgray" # ANSI 8
+accent = "cyan"         # focused border
+overlay0 = "#6b7a94"    # muted text, unfocused borders
+active_row_bg = "black" # selected row
+mauve = "magenta"       # focused branch
 
 # Layer appearance-specific overrides on top when auto_switch is enabled.
 # [theme.custom.light]
