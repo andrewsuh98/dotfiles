@@ -2,8 +2,8 @@
 # Provision a fresh Ubuntu server, once, before install.sh. Run as root (or with
 # sudo) from an interactive SSH session:
 #
-#   curl -fsSLo /tmp/server.sh https://raw.githubusercontent.com/andrewsuh98/dotfiles/main/provision/server.sh
-#   sudo bash /tmp/server.sh
+#   curl -fsSLo /tmp/server.sh https://raw.githubusercontent.com/andrewsuh98/dotfiles/main/provision/server.sh \
+#     && sudo bash /tmp/server.sh
 #
 # It updates packages, turns on automatic security updates, creates your user,
 # sets the hostname, joins Tailscale, and then, after you confirm you can log in
@@ -51,6 +51,8 @@ say "Updating packages"
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=l  # list services needing a restart instead of prompting
 apt_opts=(-y -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold)
+# Finish any package setup an earlier failed run left half-done; apt refuses to run otherwise.
+dpkg --configure -a
 apt-get update
 # full-upgrade, not upgrade: kernel updates arrive as new packages, which upgrade keeps back.
 apt-get "${apt_opts[@]}" full-upgrade

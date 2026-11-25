@@ -8,8 +8,8 @@ chezmoi ignores this folder.
 On a fresh Ubuntu server, logged in as root or as the provider's default sudo user:
 
 ```bash
-curl -fsSLo /tmp/server.sh https://raw.githubusercontent.com/andrewsuh98/dotfiles/main/provision/server.sh
-sudo bash /tmp/server.sh
+curl -fsSLo /tmp/server.sh https://raw.githubusercontent.com/andrewsuh98/dotfiles/main/provision/server.sh \
+  && sudo bash /tmp/server.sh
 ```
 
 It asks for a username and hostname, sets a password, copies your SSH keys from the
@@ -32,10 +32,11 @@ tests the sudo path; the root path gets tested on a real provider.
 
 1. Create an ephemeral, reusable auth key in the Tailscale admin console (Settings, Keys),
    so the test machine leaves the tailnet on its own once it is gone.
-2. Launch a VM with your Mac's key on the `ubuntu` user (`multipass find` lists images):
+2. Launch a VM with your Mac's key on the `ubuntu` user (`multipass find` lists images).
+   The default 5 GB disk is too small for a kernel update, so ask for 20 GB:
 
    ```bash
-   multipass launch 26.04 --name prov-test --cloud-init - <<EOF
+   multipass launch 26.04 --name prov-test --disk 20G --cloud-init - <<EOF
    #cloud-config
    ssh_authorized_keys:
      - $(cat ~/.ssh/id_ed25519.pub)
