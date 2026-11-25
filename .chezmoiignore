@@ -3,6 +3,9 @@ provision
 CLAUDE.md
 README.md
 
+{{ if ne .chezmoi.os "linux" -}}
+.zshenv
+{{ end -}}
 {{ if not .rice -}}
 .config/aerospace
 .config/sketchybar

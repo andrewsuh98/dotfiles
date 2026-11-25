@@ -1,0 +1,11 @@
+# Read by every zsh, including the non-interactive one behind `ssh host cmd`
+# (how mosh starts mosh-server), so PATH lives here rather than in .zshrc.
+# Linux only; on macOS .zshrc sets PATH (see the note there).
+typeset -U path PATH
+
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+path=("$HOME/.local/bin" $path)
+export PATH
