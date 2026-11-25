@@ -20,6 +20,11 @@ If you enable Mac App Store apps, sign into the App Store first. Otherwise those
 skipped with a warning that prints the `mas install` command to run later. Rerunning the
 bootstrap command pulls the latest dotfiles and applies them.
 
+## Fresh Linux server
+
+Before the bootstrap, run `provision/server.sh` as root once to create your user, join
+Tailscale, and lock SSH down to Tailscale. See [provision/README.md](provision/README.md).
+
 ## After bootstrap
 
 A few steps stay manual. macOS prompts for most of them the first time each app starts.
