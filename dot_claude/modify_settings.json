@@ -3,10 +3,18 @@
   Merges the settings below into the live ~/.claude/settings.json instead of
   replacing it, so changes Claude Code writes itself (/plugin, /model) survive
   `chezmoi apply`. Every top-level key below is owned and overwritten on apply,
-  except enabledPlugins, which is merged per plugin. Keys not listed here are
-  left alone. Removing a key or plugin here does not remove it from machines
-  that already have it. The chezmoi:modify-template marker above is what makes
-  the live file available as .chezmoi.stdin; don't add a .tmpl suffix.
+  except three that other tools also write to:
+    - enabledPlugins is merged per plugin, and env per variable: the values
+      below win, other entries stay.
+    - hooks is merged per command. In each event below, any hook running one
+      of the commands below is replaced by the current entry here, which goes
+      first; hooks other tools install (moshi-hook) stay after it, and events
+      not listed here are left alone.
+  Keys not listed here are left alone. Removing a key, plugin, variable or hook
+  here does not remove it from machines that already have it, and neither does
+  changing a hook's command: the old command is no longer recognized as ours.
+  The chezmoi:modify-template marker above is what makes the live file
+  available as .chezmoi.stdin; don't add a .tmpl suffix.
 
   jq does the merge because it keeps the live file's key order, which is the
   order Claude Code writes in; Go templates would sort every key and turn each
@@ -101,7 +109,16 @@
 {{ $managed }}
 {{ else if lookPath "jq" -}}
 {{-   $merged := output "jq" "-n" "--argjson" "cur" .chezmoi.stdin "--argjson" "m" $managed
-        `$cur + ($m | del(.enabledPlugins)) | .enabledPlugins = (($cur.enabledPlugins // {}) + $m.enabledPlugins)` -}}
+        `[$m.hooks[][].hooks[].command] as $ours
+        | $cur + $m
+        | .env = (($cur.env // {}) + $m.env)
+        | .enabledPlugins = (($cur.enabledPlugins // {}) + $m.enabledPlugins)
+        | .hooks = reduce ($m.hooks | keys_unsorted[]) as $e ($cur.hooks // {};
+            .[$e] = $m.hooks[$e] + [(.[$e] // [])[]
+              | if (.hooks | type) == "array"
+                then .hooks |= map(select(.command | IN($ours[]) | not))
+                  | select(.hooks != [])
+                else . end])` -}}
 {{-   if eq (toJson (fromJson $merged)) (toJson (fromJson .chezmoi.stdin)) -}}
 {{-     .chezmoi.stdin -}}
 {{-   else -}}
