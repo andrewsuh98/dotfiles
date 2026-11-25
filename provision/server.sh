@@ -52,7 +52,8 @@ export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=l  # list services needing a restart instead of prompting
 apt_opts=(-y -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold)
 apt-get update
-apt-get "${apt_opts[@]}" upgrade
+# full-upgrade, not upgrade: kernel updates arrive as new packages, which upgrade keeps back.
+apt-get "${apt_opts[@]}" full-upgrade
 # Minimal images can lack any of these.
 apt-get "${apt_opts[@]}" install sudo curl ca-certificates openssh-server ufw unattended-upgrades
 
